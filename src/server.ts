@@ -2,13 +2,14 @@ import { config } from 'dotenv'
 
 import express from 'express'
 
-import router from './routes/getUserRoute'
+import router from './routes/UserRoute'
 
 import { MongoClient } from './database/mongo'
 
 const main = async () => {
   config()
   const app = express()
+  app.use(express.json())
   await MongoClient.connect()
   app.use(router)
 
