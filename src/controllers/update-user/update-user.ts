@@ -39,7 +39,7 @@ export class UpdateUserController implements IController {
       const user = await this.updateUserRepository.updateUser(id, body)
       return ok(user)
     } catch (error) {
-      return serverError('Something went wrong')
+      return serverError()
     }
   }
 }

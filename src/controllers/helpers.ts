@@ -28,7 +28,7 @@ export const notFound = (message: string) => ({
   body: message,
 })
 
-export const serverError = (message: string) => ({
+export const serverError = () => ({
   statusCode: 500,
-  body: message,
+  body: 'Internal server error',
 })

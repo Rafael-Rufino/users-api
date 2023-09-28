@@ -40,7 +40,7 @@ export class CreateUserController implements IController {
       })
       return created(user)
     } catch (err) {
-      return serverError('Internal server error')
+      return serverError()
     }
   }
 }
