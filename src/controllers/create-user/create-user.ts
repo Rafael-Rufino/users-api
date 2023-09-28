@@ -3,6 +3,7 @@ import { User } from '../../models/users'
 
 import { HttpRequest, HttpResponse, IController } from '../protocols'
 
+import { badRequest, created, serverError } from '../helpers'
 import { CreateUserParams, ICreateUserRepository } from './protocols'
 
 export class CreateUserController implements IController {
@@ -16,28 +17,19 @@ export class CreateUserController implements IController {
 
       for (const field of requiredFields) {
         if (!httpRequest?.body?.[field as keyof CreateUserParams]) {
-          return {
-            statusCode: 400,
-            body: `Field ${field} is required`,
-          }
+          return badRequest(`Field ${field} is required`)
         }
       }
 
       if (!httpRequest.body) {
-        return {
-          statusCode: 400,
-          body: 'Please especify body',
-        }
+        return badRequest('Please especify body')
       }
       const { firstName, lastName, email, password } = httpRequest.body
 
       const emailIsValid = validator.isEmail(email)
 
       if (!emailIsValid) {
-        return {
-          statusCode: 400,
-          body: 'E-mail is invalid',
-        }
+        return badRequest('E-mail is invalid')
       }
 
       const user = await this.createUserRepository.createUser({
@@ -46,16 +38,9 @@ export class CreateUserController implements IController {
         email,
         password,
       })
-
-      return {
-        statusCode: 201,
-        body: user,
-      }
+      return created(user)
     } catch (err) {
-      return {
-        statusCode: 500,
-        body: 'Internal server error',
-      }
+      return serverError('Internal server error')
     }
   }
 }

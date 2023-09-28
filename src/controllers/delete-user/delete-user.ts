@@ -1,4 +1,5 @@
 import { User } from '../../models/users'
+import { badRequest, ok } from '../helpers'
 
 import { HttpRequest, HttpResponse, IController } from '../protocols'
 
@@ -11,23 +12,13 @@ export class DeleteUserController implements IController {
       const id = httpRequest?.params?.id
 
       if (!id) {
-        return {
-          statusCode: 400,
-          body: 'missing user id',
-        }
+        return badRequest('Missing param id')
       }
 
       const user = await this.deleteUserRepository.deleteUser(id)
-
-      return {
-        statusCode: 200,
-        body: user,
-      }
+      return ok(user)
     } catch (error) {
-      return {
-        statusCode: 400,
-        body: 'Something went wrong',
-      }
+      return badRequest('Something went wrong')
     }
   }
 }
